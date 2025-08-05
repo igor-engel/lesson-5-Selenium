@@ -26,19 +26,6 @@ public class WebShopTest {
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
-    /*@ParameterizedTest
-    @ValueSource(strings = {"Laptop", "Smartphone", "Fiction"})
-    public void addItems(String item) {
-        WebElement searchTerms = driver.findElement(By.id("small-searchterms"));
-        searchTerms.sendKeys(item);
-
-        WebElement search = driver.findElement(By.cssSelector("input[value = 'Search']"));
-        search.click();
-
-        WebElement addToCart = driver.findElement(By.cssSelector("input[value = 'Add to cart']"));
-        addToCart.click();
-    }*/
-
     @ParameterizedTest
     @ValueSource(strings = {"Laptop", "Smartphone", "Fiction"})
     public void addItems(String item) {
