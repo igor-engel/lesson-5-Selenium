@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.concurrent.TimeUnit;
 
-public class demoQATest {
+public class DemoQATest {
     private WebDriver driver;
 
     @BeforeEach
@@ -23,13 +23,13 @@ public class demoQATest {
 
         driver.get("https://demoqa.com/automation-practice-form");
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        //driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
         /*WebElement iframe = driver.findElement(By.id("GTM-MX8DD4S"));
         driver.switchTo().frame(iframe);*/
     }
 
-    @Test
+   /* @Test
     public void checkURL() {
         Assertions.assertEquals("https://demoqa.com/automation-practice-form", driver.getCurrentUrl(),
                 "current URL = " + driver.getCurrentUrl());
@@ -47,10 +47,22 @@ public class demoQATest {
     public void completeRadio() {
         WebElement testRadio = driver.findElement(By.cssSelector("input[name='gender'][value='Male']"));
         testRadio.click();
+    }*/
+
+    @Test
+    public void completeForm() {
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+        WebElement selectDropdown = driver.findElement(By.xpath("//*[contains(text(), 'Select State')]"));
+        Select select = new Select(selectDropdown);
+        select.selectByVisibleText("Haryana");
+
+        WebElement testRadio = driver.findElement(By.cssSelector("input[name='gender'][value='Male']"));
+        testRadio.click();
     }
 
-   @AfterEach
+   /*@AfterEach
     public void tearDown() {
         driver.quit();
-    }
+    }*/
 }
