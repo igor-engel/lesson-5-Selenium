@@ -1,8 +1,8 @@
 package ru.academits;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
@@ -20,6 +20,7 @@ public class FormDesignerTest {
         driver = new ChromeDriver();
         driver.get("https://formdesigner.ru/examples/order.html");
         driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
     @Test
@@ -35,14 +36,21 @@ public class FormDesignerTest {
 
         driver.findElement(By.xpath("//*[contains(text(), 'Отправить')]")).sendKeys(Keys.RETURN);
 
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-
         errors = driver.findElements(By.xpath("//*[@class='errorSummary errorSummary_top']//ul//li"));
 
-        Assertions.assertEquals("ФИО: field is required.", errors.get(0).getText());
-        Assertions.assertEquals("E-mail field is required.", errors.get(1).getText());
-        Assertions.assertEquals("Количество field is required.", errors.get(2).getText());
-        Assertions.assertEquals("Дата доставки field is required.", errors.get(3).getText());
+        String name = "Необходимо заполнить поле ФИО:.";
+        String mail = "Необходимо заполнить поле E-mail.";
+        String count = "Необходимо заполнить поле Количество.";
+        String date = "Необходимо заполнить поле Дата доставки.";
+
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        softAssertions.assertThat(name).isEqualTo(errors.get(0).getText());
+        softAssertions.assertThat(mail).isEqualTo(errors.get(1).getText());
+        softAssertions.assertThat(count).isEqualTo(errors.get(2).getText());
+        softAssertions.assertThat(date).isEqualTo(errors.get(3).getText());
+
+        softAssertions.assertAll();
     }
 
     @AfterEach
