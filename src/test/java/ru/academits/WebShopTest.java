@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 
 public class WebShopTest {
     private WebDriver driver;
-    private WebElement element;
 
     @BeforeEach
     public void setUp() {
@@ -29,41 +28,35 @@ public class WebShopTest {
         driver.get("https://demowebshop.tricentis.com/");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-
-        /*
-        WebDriverWait wait = new WebDriverWait(driver, timeO);
-        Duration timeout = Duration.ofSeconds(30);
-        Duration sleep = Duration.ofMillis(500);
-        wait = new WebDriverWait(driver, timeout);*/
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"Laptop", "Smartphone", "Fiction"})
     public void addItems(String item) {
-        element = driver.findElement(By.id("small-searchterms"));
-        element.sendKeys(item);
+        WebElement smallSearchterms = driver.findElement(By.id("small-searchterms"));
+        smallSearchterms.sendKeys(item);
 
-        element = driver.findElement(By.cssSelector("input[value = 'Search']"));
-        element.click();
+        WebElement search = driver.findElement(By.cssSelector("input[value = 'Search']"));
+        search.click();
 
         String product = driver.findElement(By.xpath("//*[@class='product-title']//a")).getText();
-        System.out.println(product);
 
         /*Duration timeout = Duration.ofSeconds(30);
         Duration sleep = Duration.ofSeconds(500);
         WebDriverWait wait = new WebDriverWait(driver, timeout, sleep);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[value = 'Add to cart']")));*/
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("//*[@class='button-2 product-box-add-to-cart-button']")));
+        //input[value = 'Add to cart']*/
 
         //периодическое StaleElementReferenceException: не знаю как обойти
-        element = driver.findElement(By.xpath("//*[@class='button-2 product-box-add-to-cart-button']"));
-        element.click();
+        WebElement cartButton = driver.findElement(By.xpath("//*[@class='button-2 product-box-add-to-cart-button']"));
+        cartButton.click();
 
-        element = driver.findElement(By.xpath("//span[contains(text(),'Shopping cart')]"));
-        element.click();
+        WebElement shoppingCart = driver.findElement(By.xpath("//span[contains(text(),'Shopping cart')]"));
+        shoppingCart.click();
 
         driver.navigate().refresh();
 
-        element = driver.findElement(By.xpath("//td[3]/a"));
+        WebElement element = driver.findElement(By.xpath("//td[3]/a"));
 
         Assertions.assertEquals(element.getText(), product);
         System.out.println("корзина = " + element.getText() + " меню = " + product);
