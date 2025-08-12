@@ -10,7 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -33,21 +32,18 @@ public class WebShopTest {
     @ParameterizedTest
     @ValueSource(strings = {"Laptop", "Smartphone", "Fiction"})
     public void addItems(String item) {
-        WebElement smallSearchterms = driver.findElement(By.id("small-searchterms"));
-        smallSearchterms.sendKeys(item);
+        WebElement smallSearchTerms = driver.findElement(By.id("small-searchterms"));
+        smallSearchTerms.sendKeys(item);
 
-        WebElement search = driver.findElement(By.cssSelector("input[value = 'Search']"));
-        search.click();
+        WebElement searchInput = driver.findElement(By.cssSelector("input[value = 'Search']"));
+        searchInput.click();
+
+        Duration timeout = Duration.ofSeconds(30);
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@class='product-title']//a")));
 
         String product = driver.findElement(By.xpath("//*[@class='product-title']//a")).getText();
 
-        /*Duration timeout = Duration.ofSeconds(30);
-        Duration sleep = Duration.ofSeconds(500);
-        WebDriverWait wait = new WebDriverWait(driver, timeout, sleep);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("//*[@class='button-2 product-box-add-to-cart-button']")));
-        //input[value = 'Add to cart']*/
-
-        //периодическое StaleElementReferenceException: не знаю как обойти
         WebElement cartButton = driver.findElement(By.xpath("//*[@class='button-2 product-box-add-to-cart-button']"));
         cartButton.click();
 
